@@ -1,9 +1,9 @@
-```php
+
 <?php
 
+use App\Http\Controllers\CourseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CourseController;
 
 // Data kursus sementara
 $courses = [
@@ -93,22 +93,25 @@ Route::post('/enrollments', function (Request $request) use (&$courses) {
         ->with('success', 'Pendaftaran berhasil diproses!');
 })->name('enrollments.store');
 
-// Menampilkan daftar kursus dari database
+// CRUD kursus
 Route::get('/courses', [CourseController::class, 'index'])
     ->name('courses.index');
 
-// Menampilkan formulir tambah kursus
 Route::get('/courses/create', [CourseController::class, 'create'])
     ->name('courses.create');
 
-// Menyimpan kursus baru ke database
 Route::post('/courses', [CourseController::class, 'store'])
     ->name('courses.store');
+
+// Detail kursus
+Route::get('/courses/{course}', [CourseController::class, 'show'])
+    ->name('courses.show');
+
 // Form edit kursus
 Route::get('/courses/{course}/edit', [CourseController::class, 'edit'])
     ->name('courses.edit');
 
-// Menyimpan perubahan kursus
+// Memperbarui kursus
 Route::put('/courses/{course}', [CourseController::class, 'update'])
     ->name('courses.update');
 
