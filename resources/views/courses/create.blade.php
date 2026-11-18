@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('title', 'Pendaftaran Kursus - KursusKu')
@@ -191,7 +192,9 @@
 
         <div class="enroll-heading">
             <span class="eyebrow">✦ JOIN KURSUSKU</span>
+
             <h1>Mulai Perjalanan Belajarmu!</h1>
+
             <p>
                 Lengkapi formulir pendaftaran berikut dan pilih kursus
                 yang sesuai dengan tujuan belajarmu.
@@ -202,16 +205,43 @@
 
             <div class="enroll-card-header">
                 <h2>📝 Form Pendaftaran Kursus</h2>
-                <p>Isi data diri dengan benar untuk melanjutkan pendaftaran.</p>
+
+                <p>
+                    Isi data diri dengan benar untuk melanjutkan pendaftaran.
+                </p>
             </div>
 
             <div class="enroll-card-body">
 
-                {{-- PERTAHANKAN ACTION DAN METHOD DARI FORM LAMA --}}
-                <form action="{{ route('enrollments.store') }}" method="POST">
+                {{-- PESAN BERHASIL --}}
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                {{-- PESAN ERROR --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <strong>Pendaftaran belum berhasil.</strong>
+                        <ul class="mb-0 mt-2">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                {{-- FORM PENDAFTARAN --}}
+                <form
+                    action="{{ route('enrollments.store') }}"
+                    method="POST"
+                >
                     @csrf
 
+                    {{-- NAMA LENGKAP --}}
                     <div class="enroll-field">
+
                         <label for="name" class="enroll-label">
                             Nama Lengkap
                         </label>
@@ -223,15 +253,21 @@
                             class="enroll-input"
                             placeholder="Masukkan nama lengkap"
                             value="{{ old('name') }}"
+                            maxlength="100"
                             required
                         >
 
                         @error('name')
-                            <small class="text-danger">{{ $message }}</small>
+                            <small class="text-danger">
+                                {{ $message }}
+                            </small>
                         @enderror
+
                     </div>
 
+                    {{-- EMAIL --}}
                     <div class="enroll-field">
+
                         <label for="email" class="enroll-label">
                             Alamat Email
                         </label>
@@ -243,15 +279,21 @@
                             class="enroll-input"
                             placeholder="contoh@email.com"
                             value="{{ old('email') }}"
+                            maxlength="120"
                             required
                         >
 
                         @error('email')
-                            <small class="text-danger">{{ $message }}</small>
+                            <small class="text-danger">
+                                {{ $message }}
+                            </small>
                         @enderror
+
                     </div>
 
+                    {{-- PILIH KURSUS --}}
                     <div class="enroll-field">
+
                         <label for="course_id" class="enroll-label">
                             Pilih Kursus
                         </label>
@@ -262,46 +304,76 @@
                             class="enroll-input"
                             required
                         >
-                            <option value="">-- Pilih Kursus --</option>
-                            <option value="1" @selected(old('course_id') == 1)>
-                                Web Dasar - Rp300.000
+                            <option value="">
+                                -- Pilih Kursus --
                             </option>
-                            <option value="2" @selected(old('course_id') == 2)>
-                                PHP Dasar - Rp400.000
-                            </option>
-                            <option value="3" @selected(old('course_id') == 3)>
-                                Laravel Dasar - Rp500.000
-                            </option>
+
+                            @forelse ($courses as $course)
+
+                                <option
+                                    value="{{ $course->id }}"
+                                    @selected(old('course_id') == $course->id)
+                                >
+                                    {{ $course->name }}
+                                    - Rp{{ number_format($course->fee, 0, ',', '.') }}
+                                </option>
+
+                            @empty
+
+                                <option value="" disabled>
+                                    Belum ada kursus tersedia
+                                </option>
+
+                            @endforelse
+
                         </select>
 
                         @error('course_id')
-                            <small class="text-danger">{{ $message }}</small>
+                            <small class="text-danger">
+                                {{ $message }}
+                            </small>
                         @enderror
 
                         <small class="enroll-hint">
-                            Pilih salah satu kursus untuk melihat informasi ketersediaan.
+                            Pilih salah satu kursus yang tersedia.
                         </small>
+
                     </div>
 
+                    {{-- INFORMASI --}}
                     <div class="enroll-info">
+
                         <span class="enroll-info-icon">💡</span>
+
                         <span>
-                            Pastikan nama dan email sudah benar sebelum
-                            mengirim formulir pendaftaran.
+                            Pastikan nama, email, dan pilihan kursus
+                            sudah benar sebelum mengirim formulir
+                            pendaftaran.
                         </span>
+
                     </div>
 
+                    {{-- TOMBOL --}}
                     <div class="d-flex flex-wrap gap-3 mt-4 enroll-actions">
-                        <button type="submit" class="enroll-submit">
+
+                        <button
+                            type="submit"
+                            class="enroll-submit"
+                        >
                             Kirim Pendaftaran →
                         </button>
 
-                        <a href="{{ url('/') }}" class="enroll-back">
+                        <a
+                            href="{{ url('/') }}"
+                            class="enroll-back"
+                        >
                             ← Kembali ke Beranda
                         </a>
+
                     </div>
 
                 </form>
+
             </div>
         </div>
     </div>
