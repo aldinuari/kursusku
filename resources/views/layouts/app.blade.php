@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="id">
 <head>
@@ -145,7 +144,7 @@
 
                     <li class="nav-item">
                         <a class="kk-nav-button"
-   href="{{ route('enrollments.create') }}">
+   href="{{ route('participants.create') }}">
     Daftar Sekarang →
 </a>
                     </li>

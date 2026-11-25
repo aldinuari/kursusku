@@ -1,378 +1,318 @@
 
 @extends('layouts.app')
 
-@section('title', 'Pendaftaran Kursus - KursusKu')
+@section('title', 'Tambah Kursus - KursusKu')
 
 @section('content')
+
 <style>
-    .enroll-page {
-        padding: 35px 0 65px;
-        background:
-            radial-gradient(circle at 5% 5%, rgba(128,101,255,.10), transparent 28%),
-            #f5f6fc;
+    .course-page {
+        min-height: 80vh;
+        padding: 45px 15px;
+        background: linear-gradient(135deg, #f4f0ff, #eef5ff);
+        border-radius: 20px;
     }
 
-    .enroll-heading {
-        max-width: 650px;
-        margin: 0 auto 30px;
-        text-align: center;
-    }
-
-    .enroll-heading .eyebrow {
-        display: inline-block;
-        padding: 8px 15px;
-        border-radius: 30px;
-        background: #eeeaff;
-        color: #7053e9;
-        font-size: 12px;
-        font-weight: 800;
-        letter-spacing: 1.5px;
-    }
-
-    .enroll-heading h1 {
-        margin: 17px 0 10px;
-        color: #10152b;
-        font-size: clamp(30px, 5vw, 42px);
-        font-weight: 850;
-        letter-spacing: -1.5px;
-    }
-
-    .enroll-heading p {
-        color: #7b8296;
-        line-height: 1.7;
-    }
-
-    .enroll-card {
-        max-width: 760px;
-        margin: auto;
-        overflow: hidden;
-        border: 1px solid #edf0f8;
-        border-radius: 22px;
-        background: white;
-        box-shadow: 0 20px 60px rgba(25,35,80,.08);
-    }
-
-    .enroll-card-header {
-        padding: 25px 32px;
-        background: linear-gradient(110deg, #10152b, #30285f);
-        color: white;
-    }
-
-    .enroll-card-header h2 {
-        margin: 0 0 6px;
-        font-size: 20px;
-        font-weight: 800;
-    }
-
-    .enroll-card-header p {
-        margin: 0;
-        color: #c8cce0;
-        font-size: 14px;
-    }
-
-    .enroll-card-body {
-        padding: 32px;
-    }
-
-    .enroll-label {
-        display: block;
-        margin-bottom: 9px;
-        color: #252b42;
-        font-size: 14px;
-        font-weight: 700;
-    }
-
-    .enroll-input {
-        width: 100%;
-        min-height: 49px;
-        padding: 12px 15px;
-        border: 1px solid #e1e5f0;
-        border-radius: 11px;
-        background: #fbfcff;
-        color: #252b42;
-        outline: none;
-        transition: .2s;
-    }
-
-    .enroll-input:focus {
-        border-color: #8065ff;
-        background: white;
-        box-shadow: 0 0 0 4px rgba(128,101,255,.12);
-    }
-
-    .enroll-field {
-        margin-bottom: 23px;
-    }
-
-    .enroll-hint {
-        display: block;
-        margin-top: 8px;
-        color: #8990a3;
-        font-size: 12px;
-    }
-
-    .enroll-submit {
-        display: inline-block;
-        padding: 13px 25px;
+    .course-card {
+        background: #fff;
         border: none;
-        border-radius: 11px;
-        background: linear-gradient(100deg, #8065ff, #4e9dff);
-        color: white;
-        font-weight: 750;
-        text-decoration: none;
-        box-shadow: 0 8px 20px rgba(99,102,241,.22);
-        transition: .25s;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 10px 35px rgba(76, 60, 130, 0.09);
     }
 
-    .enroll-submit:hover {
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 12px 25px rgba(99,102,241,.32);
+    .course-card-header {
+        padding: 25px 30px;
+        color: #fff;
+        background: linear-gradient(135deg, #7952d8, #526fe0);
     }
 
-    .enroll-back {
+    .course-card-header h4 {
+        font-weight: 800;
+        margin-bottom: 5px;
+    }
+
+    .course-card-header small {
+        color: rgba(255,255,255,0.85);
+    }
+
+    .course-card-body {
+        padding: 30px;
+    }
+
+    .course-card-body .form-label {
+        color: #403765;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .course-card-body .form-control,
+    .course-card-body .form-select {
+        border: 1px solid #e4e0f0;
+        border-radius: 10px;
+        padding: 11px 13px;
+        color: #39334f;
+        background-color: #fff;
+    }
+
+    .course-card-body .form-control:focus,
+    .course-card-body .form-select:focus {
+        border-color: #7952d8;
+        box-shadow: 0 0 0 3px rgba(121, 82, 216, 0.12);
+    }
+
+    .course-card-body .form-control::placeholder {
+        color: #aaa6ba;
+    }
+
+    .course-card-body .form-control.is-invalid,
+    .course-card-body .form-select.is-invalid {
+        border-color: #dc3545;
+    }
+
+    .course-card-body .text-danger {
         display: inline-block;
-        padding: 12px 22px;
-        border: 1px solid #e1e5f0;
-        border-radius: 11px;
-        background: white;
-        color: #596078;
-        font-weight: 650;
-        text-decoration: none;
-        transition: .2s;
-    }
-
-    .enroll-back:hover {
-        border-color: #8065ff;
-        color: #7053e9;
-        background: #f8f6ff;
-    }
-
-    .enroll-info {
-        display: flex;
-        gap: 12px;
-        align-items: flex-start;
-        margin-top: 22px;
-        padding: 15px;
-        border-radius: 12px;
-        background: #f3f6ff;
-        color: #626d8b;
+        margin-top: 5px;
         font-size: 13px;
-        line-height: 1.6;
     }
 
-    .enroll-info-icon {
-        font-size: 20px;
+    .course-alert {
+        border: none;
+        border-radius: 10px;
+        padding: 15px 18px;
+    }
+
+    .btn-course-primary {
+        color: #fff;
+        background: linear-gradient(135deg, #7952d8, #526fe0);
+        border: none;
+        border-radius: 10px;
+        padding: 11px 22px;
+        font-weight: 600;
+        transition: 0.2s;
+    }
+
+    .btn-course-primary:hover {
+        color: #fff;
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
+
+    .btn-course-secondary {
+        color: #65558f;
+        background: #f0edfa;
+        border: 1px solid #e5def7;
+        border-radius: 10px;
+        padding: 11px 22px;
+        font-weight: 600;
+        transition: 0.2s;
+    }
+
+    .btn-course-secondary:hover {
+        color: #493779;
+        background: #e8e2f8;
     }
 
     @media (max-width: 576px) {
-        .enroll-card-body {
-            padding: 23px 19px;
+        .course-page {
+            padding: 25px 10px;
         }
 
-        .enroll-card-header {
+        .course-card-header {
             padding: 22px;
         }
 
-        .enroll-actions {
-            display: flex;
-            flex-direction: column;
+        .course-card-body {
+            padding: 22px 17px;
         }
 
-        .enroll-actions a,
-        .enroll-actions button {
+        .course-actions .btn {
             width: 100%;
-            text-align: center;
         }
     }
 </style>
 
-<div class="enroll-page">
+<div class="course-page">
     <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
 
-        <div class="enroll-heading">
-            <span class="eyebrow">✦ JOIN KURSUSKU</span>
+                <div class="text-center mb-4">
+                    <span class="badge rounded-pill px-3 py-2 mb-2"
+                          style="background:#eee8ff;color:#6d4bd1;">
+                        ✦ KURSUSKU
+                    </span>
 
-            <h1>Mulai Perjalanan Belajarmu!</h1>
+                    <h2 class="fw-bold mb-2" style="color:#25204a;">
+                        Tambah Kursus
+                    </h2>
 
-            <p>
-                Lengkapi formulir pendaftaran berikut dan pilih kursus
-                yang sesuai dengan tujuan belajarmu.
-            </p>
-        </div>
+                    <p class="mb-0" style="color:#77758d;">
+                        Tambahkan program pembelajaran baru untuk peserta KursusKu.
+                    </p>
+                </div>
 
-        <div class="enroll-card">
-
-            <div class="enroll-card-header">
-                <h2>📝 Form Pendaftaran Kursus</h2>
-
-                <p>
-                    Isi data diri dengan benar untuk melanjutkan pendaftaran.
-                </p>
-            </div>
-
-            <div class="enroll-card-body">
-
-                {{-- PESAN BERHASIL --}}
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                {{-- PESAN ERROR --}}
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <strong>Pendaftaran belum berhasil.</strong>
-                        <ul class="mb-0 mt-2">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
-                {{-- FORM PENDAFTARAN --}}
-                <form
-                    action="{{ route('enrollments.store') }}"
-                    method="POST"
-                >
-                    @csrf
-
-                    {{-- NAMA LENGKAP --}}
-                    <div class="enroll-field">
-
-                        <label for="name" class="enroll-label">
-                            Nama Lengkap
-                        </label>
-
-                        <input
-                            type="text"
-                            name="name"
-                            id="name"
-                            class="enroll-input"
-                            placeholder="Masukkan nama lengkap"
-                            value="{{ old('name') }}"
-                            maxlength="100"
-                            required
-                        >
-
-                        @error('name')
-                            <small class="text-danger">
-                                {{ $message }}
-                            </small>
-                        @enderror
-
+                <div class="card course-card">
+                    <div class="course-card-header">
+                        <h4>📚 Tambah Kursus</h4>
+                        <small>Masukkan informasi kursus baru</small>
                     </div>
 
-                    {{-- EMAIL --}}
-                    <div class="enroll-field">
+                    <div class="course-card-body">
 
-                        <label for="email" class="enroll-label">
-                            Alamat Email
-                        </label>
+                        @if ($errors->any())
+                            <div class="alert alert-danger course-alert">
+                                <strong>Data belum berhasil disimpan.</strong>
+                                <ul class="mb-0 mt-2">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
 
-                        <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            class="enroll-input"
-                            placeholder="contoh@email.com"
-                            value="{{ old('email') }}"
-                            maxlength="120"
-                            required
-                        >
+                        <form action="{{ route('courses.store') }}" method="POST">
+                            @csrf
 
-                        @error('email')
-                            <small class="text-danger">
-                                {{ $message }}
-                            </small>
-                        @enderror
-
-                    </div>
-
-                    {{-- PILIH KURSUS --}}
-                    <div class="enroll-field">
-
-                        <label for="course_id" class="enroll-label">
-                            Pilih Kursus
-                        </label>
-
-                        <select
-                            name="course_id"
-                            id="course_id"
-                            class="enroll-input"
-                            required
-                        >
-                            <option value="">
-                                -- Pilih Kursus --
-                            </option>
-
-                            @forelse ($courses as $course)
-
-                                <option
-                                    value="{{ $course->id }}"
-                                    @selected(old('course_id') == $course->id)
+                            <div class="mb-3">
+                                <label for="code" class="form-label">Kode Kursus</label>
+                                <input
+                                    type="text"
+                                    name="code"
+                                    id="code"
+                                    class="form-control"
+                                    value="{{ old('code') }}"
+                                    maxlength="20"
+                                    placeholder="Contoh: WEB-101"
+                                    required
                                 >
-                                    {{ $course->name }}
-                                    - Rp{{ number_format($course->fee, 0, ',', '.') }}
-                                </option>
+                                @error('code')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
 
-                            @empty
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nama Kursus</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    id="name"
+                                    class="form-control"
+                                    value="{{ old('name') }}"
+                                    minlength="3"
+                                    maxlength="120"
+                                    placeholder="Masukkan nama kursus"
+                                    required
+                                >
+                                @error('name')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
 
-                                <option value="" disabled>
-                                    Belum ada kursus tersedia
-                                </option>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Deskripsi</label>
+                                <textarea
+                                    name="description"
+                                    id="description"
+                                    class="form-control"
+                                    rows="4"
+                                    maxlength="2000"
+                                    placeholder="Deskripsi kursus (opsional)"
+                                >{{ old('description') }}</textarea>
+                                @error('description')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
 
-                            @endforelse
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="fee" class="form-label">Biaya Kursus (Rp)</label>
+                                    <input
+                                        type="number"
+                                        name="fee"
+                                        id="fee"
+                                        class="form-control"
+                                        value="{{ old('fee') }}"
+                                        min="0"
+                                        required
+                                    >
+                                    @error('fee')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
 
-                        </select>
+                                <div class="col-md-6 mb-3">
+                                    <label for="quota" class="form-label">Kuota Peserta</label>
+                                    <input
+                                        type="number"
+                                        name="quota"
+                                        id="quota"
+                                        class="form-control"
+                                        value="{{ old('quota') }}"
+                                        min="1"
+                                        max="500"
+                                        required
+                                    >
+                                    @error('quota')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
 
-                        @error('course_id')
-                            <small class="text-danger">
-                                {{ $message }}
-                            </small>
-                        @enderror
+                            <div class="mb-3">
+                                <label for="start_date" class="form-label">Tanggal Mulai</label>
+                                <input
+                                    type="date"
+                                    name="start_date"
+                                    id="start_date"
+                                    class="form-control"
+                                    value="{{ old('start_date') }}"
+                                    required
+                                >
+                                @error('start_date')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
 
-                        <small class="enroll-hint">
-                            Pilih salah satu kursus yang tersedia.
-                        </small>
+                            <div class="mb-4">
+                                <label for="status" class="form-label">Status Kursus</label>
+                                <select
+                                    name="status"
+                                    id="status"
+                                    class="form-select"
+                                    required
+                                >
+                                    <option value="">-- Pilih Status --</option>
+                                    <option value="draft" @selected(old('status') == 'draft')>
+                                        Draft
+                                    </option>
+                                    <option value="open" @selected(old('status') == 'open')>
+                                        Dibuka
+                                    </option>
+                                    <option value="closed" @selected(old('status') == 'closed')>
+                                        Ditutup
+                                    </option>
+                                </select>
+                                @error('status')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
 
+                            <div class="d-flex gap-2 flex-wrap course-actions">
+                                <button type="submit" class="btn btn-course-primary">
+                                    ✓ Simpan Kursus
+                                </button>
+
+                                <a href="{{ route('courses.index') }}"
+                                   class="btn btn-course-secondary">
+                                    ← Kembali
+                                </a>
+                            </div>
+
+                        </form>
                     </div>
-
-                    {{-- INFORMASI --}}
-                    <div class="enroll-info">
-
-                        <span class="enroll-info-icon">💡</span>
-
-                        <span>
-                            Pastikan nama, email, dan pilihan kursus
-                            sudah benar sebelum mengirim formulir
-                            pendaftaran.
-                        </span>
-
-                    </div>
-
-                    {{-- TOMBOL --}}
-                    <div class="d-flex flex-wrap gap-3 mt-4 enroll-actions">
-
-                        <button
-                            type="submit"
-                            class="enroll-submit"
-                        >
-                            Kirim Pendaftaran →
-                        </button>
-
-                        <a
-                            href="{{ url('/') }}"
-                            class="enroll-back"
-                        >
-                            ← Kembali ke Beranda
-                        </a>
-
-                    </div>
-
-                </form>
+                </div>
 
             </div>
         </div>

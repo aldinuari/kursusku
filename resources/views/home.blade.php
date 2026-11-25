@@ -382,12 +382,12 @@
 
                     {{-- TOMBOL HERO --}}
                     <div class="d-flex flex-wrap gap-3 mt-4">
-                        <a href="{{ route('enrollments.create') }}" class="kk-primary-btn">
+                        <a href="{{ route('courses.index') }}" class="kk-primary-btn">
                             Mulai Belajar Sekarang →
                         </a>
 
-                        <a href="{{ route('enrollments.create') }}" class="kk-primary-btn">
-                            Daftar Kursus →
+                        <a href="{{ route('courses.index') }}" class="kk-primary-btn">
+                            Lihat Daftar Kursus →
                         </a>
 
                         <a href="#kursus" class="kk-secondary-btn">
@@ -477,7 +477,7 @@
                             <small>Biaya kursus</small>
                             <strong>Rp300.000</strong>
                         </div>
-                        <a href="{{ route('enrollments.create') }}" class="kk-course-link">
+                        <a href="{{ route('courses.index') }}" class="kk-course-link">
                             Pilih Kursus →
                         </a>
                     </div>
@@ -495,7 +495,7 @@
                             <small>Biaya kursus</small>
                             <strong>Rp400.000</strong>
                         </div>
-                        <a href="{{ route('enrollments.create') }}" class="kk-course-link">
+                        <a href="{{ route('courses.index') }}" class="kk-course-link">
                             Pilih Kursus →
                         </a>
                     </div>
@@ -513,7 +513,7 @@
                             <small>Biaya kursus</small>
                             <strong>Rp500.000</strong>
                         </div>
-                        <a href="{{ route('enrollments.create') }}" class="kk-course-link">
+                        <a href="{{ route('courses.index') }}" class="kk-course-link">
                             Pilih Kursus →
                         </a>
                     </div>
@@ -576,7 +576,7 @@
                 <p class="mt-3 mb-4">
                     Jangan hanya punya mimpi. Mulai bangun kemampuanmu hari ini!
                 </p>
-                <a href="{{ route('enrollments.create') }}" class="kk-primary-btn">
+                <a href="{{ route('courses.index') }}" class="kk-primary-btn">
                     Daftar Kursus Sekarang →
                 </a>
             </div>
