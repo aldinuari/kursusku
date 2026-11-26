@@ -3,17 +3,42 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
 
 class CourseController extends Controller
 {
-    // Menampilkan daftar kursus
-    public function index()
+    // Menampilkan daftar kursus dengan search, filter, dan pagination
+    public function index(Request $request)
     {
-        $courses = Course::latest()->get();
+        $search = trim((string) $request->query('q'));
+        $status = trim((string) $request->query('status'));
 
-        return view('courses.index', compact('courses'));
+        $allowedStatuses = ['open', 'closed', 'draft'];
+
+        $courses = Course::query()
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('code', 'like', "%{$search}%")
+                      ->orWhere('name', 'like', "%{$search}%");
+                });
+            })
+            ->when(
+                in_array($status, $allowedStatuses, true),
+                function ($query) use ($status) {
+                    $query->where('status', $status);
+                }
+            )
+            ->orderBy('name')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('courses.index', compact(
+            'courses',
+            'search',
+            'status'
+        ));
     }
 
     // Menampilkan detail kursus

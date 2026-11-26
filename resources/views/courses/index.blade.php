@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('title', 'Daftar Kursus - KursusKu')
@@ -125,6 +126,63 @@
     .courses-card-header span {
         color: #8990a3;
         font-size: 13px;
+    }
+
+    /* Pencarian dan filter */
+    .courses-filter {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 18px 25px;
+        border-bottom: 1px solid #edf0f8;
+    }
+
+    .courses-filter input,
+    .courses-filter select {
+        min-height: 42px;
+        padding: 9px 12px;
+        border: 1px solid #e1e5f0;
+        border-radius: 9px;
+        color: #424a62;
+        background: white;
+        font-size: 13px;
+        outline: none;
+    }
+
+    .courses-filter input {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .courses-filter input:focus,
+    .courses-filter select:focus {
+        border-color: #8065ff;
+        box-shadow: 0 0 0 3px rgba(128,101,255,.10);
+    }
+
+    .filter-btn,
+    .reset-btn {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 42px;
+        padding: 9px 17px;
+        border: none;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 750;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .filter-btn {
+        color: white;
+        background: linear-gradient(100deg, #8065ff, #4e9dff);
+    }
+
+    .reset-btn {
+        color: #7053e9;
+        background: #f0edff;
     }
 
     .courses-table-wrap {
@@ -265,6 +323,14 @@
         text-align: center;
     }
 
+    /* Pagination */
+    .courses-pagination {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+        border-top: 1px solid #edf0f8;
+    }
+
     .courses-total {
         display: flex;
         justify-content: space-between;
@@ -305,6 +371,20 @@
 
         .courses-card-header {
             padding: 18px;
+        }
+
+        .courses-filter {
+            padding: 15px;
+        }
+
+        .courses-filter input,
+        .courses-filter select {
+            width: 100%;
+        }
+
+        .filter-btn,
+        .reset-btn {
+            flex: 1;
         }
     }
 </style>
@@ -372,6 +452,38 @@
                 <span>Informasi kursus KursusKu</span>
             </div>
 
+            {{-- Form pencarian dan filter --}}
+            <form action="{{ route('courses.index') }}"
+                  method="GET"
+                  class="courses-filter">
+
+                <input type="text"
+                       name="q"
+                       placeholder="Cari kode atau nama kursus..."
+                       value="{{ $search }}">
+
+                <select name="status">
+                    <option value="">Semua Status</option>
+                    <option value="open" {{ $status === 'open' ? 'selected' : '' }}>
+                        Dibuka
+                    </option>
+                    <option value="closed" {{ $status === 'closed' ? 'selected' : '' }}>
+                        Ditutup
+                    </option>
+                    <option value="draft" {{ $status === 'draft' ? 'selected' : '' }}>
+                        Draft
+                    </option>
+                </select>
+
+                <button type="submit" class="filter-btn">
+                    Cari
+                </button>
+
+                <a href="{{ route('courses.index') }}" class="reset-btn">
+                    Reset
+                </a>
+            </form>
+
             <div class="courses-table-wrap">
                 <table class="courses-table">
 
@@ -393,7 +505,7 @@
                             <tr>
                                 <td>
                                     <span class="course-number">
-                                        {{ $loop->iteration }}
+                                        {{ $courses->firstItem() + $loop->index }}
                                     </span>
                                 </td>
 
@@ -474,10 +586,14 @@
                                         📚
                                     </div>
 
-                                    <strong>Belum ada data kursus</strong>
+                                    <strong>
+                                        {{ $search || $status ? 'Kursus tidak ditemukan' : 'Belum ada data kursus' }}
+                                    </strong>
 
                                     <p class="mb-0 mt-2">
-                                        Silakan tambahkan kursus terlebih dahulu.
+                                        {{ $search || $status
+                                            ? 'Coba gunakan kata kunci atau filter yang berbeda.'
+                                            : 'Silakan tambahkan kursus terlebih dahulu.' }}
                                     </p>
                                 </td>
                             </tr>
@@ -486,13 +602,21 @@
 
                 </table>
             </div>
+
+            {{-- Navigasi halaman --}}
+            @if ($courses->hasPages())
+                <div class="courses-pagination">
+                    {{ $courses->links() }}
+                </div>
+            @endif
+
         </div>
 
-        {{-- Informasi jumlah data --}}
+        {{-- Informasi jumlah seluruh data --}}
         <div class="courses-total">
             <span>Total kursus yang terdaftar</span>
 
-            <strong>{{ $courses->count() }} Kursus</strong>
+            <strong>{{ $courses->total() }} Kursus</strong>
         </div>
 
     </div>
