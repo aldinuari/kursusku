@@ -1,6 +1,7 @@
-```php
+
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EnrollmentController;
@@ -17,14 +18,65 @@ Route::get('/', function () {
 
 
 // ==========================================
+// AUTENTIKASI: LOGIN DAN LUPA PASSWORD
+// ==========================================
+
+Route::middleware('guest')->group(function () {
+
+    // Halaman login
+    Route::get('/login', [AuthController::class, 'showLogin'])
+        ->name('login');
+
+    // Proses login
+    Route::post('/login', [AuthController::class, 'login'])
+        ->name('login.process');
+
+    // Halaman lupa password
+    Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])
+        ->name('password.request');
+
+    // Mengirim link reset password
+    Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])
+        ->name('password.email');
+
+    // Halaman membuat password baru
+    Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])
+        ->name('password.reset');
+
+    // Memproses password baru
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])
+        ->name('password.update');
+});
+
+
+// ==========================================
+// HALAMAN KHUSUS PENGGUNA YANG SUDAH LOGIN
+// ==========================================
+
+Route::middleware('auth')->group(function () {
+
+    // Dashboard
+    Route::get('/dashboard', [AuthController::class, 'dashboard'])
+        ->name('dashboard');
+
+    // Profil saya
+    Route::get('/profile', function () {
+        return view('profile');
+    })->name('profile');
+
+    // Logout
+    Route::post('/logout', [AuthController::class, 'logout'])
+        ->name('logout');
+});
+
+
+// ==========================================
 // PENDAFTARAN PESERTA
 // ==========================================
 
-// Menampilkan form pendaftaran peserta
 Route::get('/participants/create', [ParticipantController::class, 'create'])
     ->name('participants.create');
 
-// Menyimpan data peserta
 Route::post('/participants', [ParticipantController::class, 'store'])
     ->name('participants.store');
 
@@ -33,15 +85,12 @@ Route::post('/participants', [ParticipantController::class, 'store'])
 // ENROLLMENT
 // ==========================================
 
-// Daftar enrollment
 Route::get('/enrollments', [EnrollmentController::class, 'index'])
     ->name('enrollments.index');
 
-// Form tambah enrollment
 Route::get('/enrollments/create', [EnrollmentController::class, 'create'])
     ->name('enrollments.create');
 
-// Simpan enrollment
 Route::post('/enrollments', [EnrollmentController::class, 'store'])
     ->name('enrollments.store');
 

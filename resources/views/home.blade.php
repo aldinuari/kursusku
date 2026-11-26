@@ -393,6 +393,16 @@
                         <a href="#kursus" class="kk-secondary-btn">
                             Jelajahi Kursus
                         </a>
+
+                        @guest
+                            <a href="{{ route('login') }}" class="kk-secondary-btn">
+                                Login →
+                            </a>
+                        @else
+                            <a href="{{ route('dashboard') }}" class="kk-secondary-btn">
+                                Dashboard →
+                            </a>
+                        @endguest
                     </div>
                 </div>
 
